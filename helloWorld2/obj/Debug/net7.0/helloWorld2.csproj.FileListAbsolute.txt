@@ -1,0 +1,15 @@
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\bin\Debug\net7.0\helloWorld2.exe
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\bin\Debug\net7.0\helloWorld2.deps.json
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\bin\Debug\net7.0\helloWorld2.runtimeconfig.json
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\bin\Debug\net7.0\helloWorld2.dll
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\bin\Debug\net7.0\helloWorld2.pdb
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.csproj.AssemblyReference.cache
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.GeneratedMSBuildEditorConfig.editorconfig
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.AssemblyInfoInputs.cache
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.AssemblyInfo.cs
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.csproj.CoreCompileInputs.cache
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.dll
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\refint\helloWorld2.dll
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.pdb
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\helloWorld2.genruntimeconfig.cache
+D:\luisjgithub\cSharpUdemyCourse\helloWorld2\obj\Debug\net7.0\ref\helloWorld2.dll
