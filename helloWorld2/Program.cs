@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Data;
-using HelloWorld2.Models;
+using helloWorld2.Models;
 using Dapper;
 using Microsoft.Data.SqlClient;
-using Helloword2.Data;
+using helloWorld2.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace helloWorld2
 {
@@ -14,7 +15,12 @@ namespace helloWorld2
     {
         static void Main(string[] args)
         {
-            DataContextDapper dapper = new DataContextDapper();
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            DataContextDapper dapper = new DataContextDapper(config);
+            DataContextEF entityFramework = new DataContextEF(config);
 
             DateTime rightnow = dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
 
@@ -28,6 +34,9 @@ namespace helloWorld2
                 VideoCard = "RTX 2060"
             };
 
+            entityFramework.Add(myComputer);
+            entityFramework.SaveChanges();
+
             string sql = @"INSERT INTO TutorialAppSchema.Computer(
                 Motherboard,
                 HasWifi,
@@ -35,7 +44,7 @@ namespace helloWorld2
                 ReleaseDate,
                 Price,
                 VideoCard
-            ) VALUES ('"+ myComputer.Motherboard
+            ) VALUES ('" + myComputer.Motherboard
             + "','" + myComputer.HasWifi
             + "','" + myComputer.HasLTE
             + "','" + myComputer.ReleaseDate
@@ -46,10 +55,13 @@ namespace helloWorld2
             // int result = dapper.ExecuteSqlWithRowCount(sql);
             bool result = dapper.ExecuteSql(sql);
 
-            Console.WriteLine(result);
+            // Console.WriteLine(result);
 
+
+            // Selecting and displaying our data using dapper. 
             string sqlSelect = @"SELECT 
             Motherboard,
+                Computer.ComputerId,
                 Computer.HasWifi,
                 Computer.HasLTE,
                 Computer.ReleaseDate,
@@ -59,23 +71,37 @@ namespace helloWorld2
 
             IEnumerable<Computer> computers = dapper.LoadData<Computer>(sqlSelect);
 
-
-            Console.WriteLine("'Motherboard','HasWifi','HasLTE',' + 'ReleaseDate','Price','VideoCard'");
+            Console.WriteLine("'ComputerId', 'Motherboard','HasWifi','HasLTE',' + 'ReleaseDate','Price','VideoCard'");
             
             foreach(Computer singleComputer in computers){
-                Console.WriteLine("'"+ myComputer.Motherboard
-            + "','" + myComputer.HasWifi
-            + "','" + myComputer.HasLTE
-            + "','" + myComputer.ReleaseDate
-            + "','" + myComputer.Price
-            + "','" + myComputer.VideoCard
-            +"'");
+                Console.WriteLine("'"+ singleComputer.ComputerId
+                + "','" + singleComputer.Motherboard
+                + "','" + singleComputer.HasWifi
+                + "','" + singleComputer.HasLTE
+                + "','" + singleComputer.ReleaseDate
+                + "','" + singleComputer.Price
+                + "','" + singleComputer.VideoCard
+                +"'");
             }
-            
-            // Console.WriteLine(myComputer.Motherboard);
-            // Console.WriteLine(myComputer.HasWifi);
-            // Console.WriteLine(myComputer.HasLTE);
-            // Console.WriteLine(myComputer.VideoCard);
+
+            //Selecting and displaying our data using entity framework.
+
+            IEnumerable<Computer>? computersEF = entityFramework.Computer?.ToList<Computer>();
+
+            Console.WriteLine("'ComputerId','Motherboard','HasWifi','HasLTE',' + 'ReleaseDate','Price','VideoCard'");
+
+            if(computersEF != null){
+                foreach(Computer singleComputer in computersEF){
+                    Console.WriteLine("'"+ singleComputer.ComputerId
+                    + "','" + singleComputer.Motherboard
+                    + "','" + singleComputer.HasWifi
+                    + "','" + singleComputer.HasLTE
+                    + "','" + singleComputer.ReleaseDate
+                    + "','" + singleComputer.Price
+                    + "','" + singleComputer.VideoCard
+                    +"'");
+                }
+            }
         }
     }
 }
