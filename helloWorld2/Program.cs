@@ -7,6 +7,10 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using helloWorld2.Data;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using AutoMapper;
 
 namespace helloWorld2
 {
@@ -15,93 +19,143 @@ namespace helloWorld2
     {
         static void Main(string[] args)
         {
+            // ------- Using System and the JsonPropertyName attribute ------//
             IConfiguration config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
 
             DataContextDapper dapper = new DataContextDapper(config);
-            DataContextEF entityFramework = new DataContextEF(config);
 
-            DateTime rightnow = dapper.LoadDataSingle<DateTime>("SELECT GETDATE()");
+            string computersJson = File.ReadAllText("ComputersSnake.json");
 
-            // Instance of Model
-            Computer myComputer = new Computer() {
-                Motherboard = "Z690",
-                HasWifi = true,
-                HasLTE = false,
-                ReleaseDate = DateTime.Now,
-                Price = 943.87m,
-                VideoCard = "RTX 2060"
+            // JsonSerializerOptions options = new JsonSerializerOptions(){
+            //     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            // };
+
+            //Deserializing with System
+            IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson);
+
+            if(computersSystem != null)
+            {
+                Console.WriteLine("JsonPropertyNameAttribute Method");
+                Console.WriteLine(computersSystem.Count());
+                // foreach(Computer computer in computersSystem){
+                //     Console.WriteLine(computer.Motherboard);
+                // }
+            }
+
+            // ------- End Using System and the JsonPropertyName attribute ------//
+
+
+            // ------- Using Auto Mapper ------//
+
+            Mapper mapper = new Mapper(new MapperConfiguration((cfg)=> {
+                cfg.CreateMap<ComputerSnake, Computer>()
+                    .ForMember(destination => destination.ComputerId, options => 
+                    options.MapFrom(source => source.computer_id))
+
+                    .ForMember(destination => destination.CPUCores, options => 
+                    options.MapFrom(source => source.cpu_cores))
+
+                    .ForMember(destination => destination.HasLTE, options => 
+                    options.MapFrom(source => source.has_lte))
+
+                    .ForMember(destination => destination.HasWifi, options => 
+                    options.MapFrom(source => source.has_wifi))
+
+                    .ForMember(destination => destination.Motherboard, options => 
+                    options.MapFrom(source => source.motherboard))
+
+                    .ForMember(destination => destination.VideoCard, options => 
+                    options.MapFrom(source => source.video_card))
+
+                    .ForMember(destination => destination.ReleaseDate, options => 
+                    options.MapFrom(source => source.release_date))
+
+                    .ForMember(destination => destination.Price, options => 
+                    options.MapFrom(source => source.price));
+            }));
+
+            JsonSerializerOptions options = new JsonSerializerOptions(){
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            entityFramework.Add(myComputer);
-            entityFramework.SaveChanges();
+            // //Deserializing with System
+            IEnumerable<ComputerSnake>? computersSnSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<ComputerSnake>>(computersJson, options);
 
-            string sql = @"INSERT INTO TutorialAppSchema.Computer(
-                Motherboard,
-                HasWifi,
-                HasLTE,
-                ReleaseDate,
-                Price,
-                VideoCard
-            ) VALUES ('" + myComputer.Motherboard
-            + "','" + myComputer.HasWifi
-            + "','" + myComputer.HasLTE
-            + "','" + myComputer.ReleaseDate
-            + "','" + myComputer.Price
-            + "','" + myComputer.VideoCard
-            +"')";
+            if(computersSnSystem != null)
+            {
+                IEnumerable<Computer> computerResult = mapper.Map<IEnumerable<Computer>>(computersSnSystem);
 
-            // int result = dapper.ExecuteSqlWithRowCount(sql);
-            bool result = dapper.ExecuteSql(sql);
+                Console.WriteLine("AutoMapper Method");
+                Console.WriteLine(computerResult.Count());
+                // foreach(Computer computer in computerResult){
+                //     Console.WriteLine(computer.Motherboard);
+                // }
+            }
 
-            // Console.WriteLine(result);
+            // //Deserializing with System
+            // IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson);
+
+            // if(computersSystem != null)
+            // {
+            //     foreach(Computer computer in computersSystem){
+            //         Console.WriteLine(computer.Motherboard);
+            //     }
+            // }
+
+            // //Deserializing with newtonSoft
+            // IEnumerable<Computer>? computersNewtonSoft = JsonConvert.DeserializeObject<IEnumerable<Computer>>(computersJson);
+
+            // //Deserializing with System
+            // IEnumerable<Computer>? computersSystem = System.Text.Json.JsonSerializer.Deserialize<IEnumerable<Computer>>(computersJson, options);
+
+            // if(computersNewtonSoft != null) {
+            //     foreach(Computer computer in computersNewtonSoft){
+            //         // Console.WriteLine(computer.Motherboard);
+
+            //         string sql = @"INSERT INTO TutorialAppSchema.Computer(
+            //             Motherboard,
+            //             HasWifi,
+            //             HasLTE,
+            //             ReleaseDate,
+            //             Price,
+            //             VideoCard   
+            //         ) VALUES ( '" + escapeSingleQuote(computer.Motherboard)
+            //         + "','" + computer.HasWifi
+            //         + "','" + computer.HasLTE
+            //         + "','" + computer.ReleaseDate
+            //         + "','" + computer.Price
+            //         + "','" + escapeSingleQuote(computer.VideoCard)
+            //         + "')";
+
+            //         dapper.ExecuteSql(sql);
+            //     }
+            // }
+
+            // JsonSerializerSettings settings = new JsonSerializerSettings()
+            // {
+            //     ContractResolver = new CamelCasePropertyNamesContractResolver()
+            // };
 
 
-            // Selecting and displaying our data using dapper. 
-            string sqlSelect = @"SELECT 
-            Motherboard,
-                Computer.ComputerId,
-                Computer.HasWifi,
-                Computer.HasLTE,
-                Computer.ReleaseDate,
-                Computer.Price,
-                Computer.VideoCard
-            FROM TutorialAppSchema.Computer";
+            // //Serializing with newtonsoft
+            // string computersCopyNewtonsoft = JsonConvert.SerializeObject(computersNewtonSoft, settings);
 
-            IEnumerable<Computer> computers = dapper.LoadData<Computer>(sqlSelect);
+            // File.WriteAllText("computersCopyNewtonsoft.txt", computersCopyNewtonsoft);
 
-            Console.WriteLine("'ComputerId', 'Motherboard','HasWifi','HasLTE',' + 'ReleaseDate','Price','VideoCard'");
+
+            // //Serialize with System
+            // string computersCopySystem = System.Text.Json.JsonSerializer.Serialize(computersSystem, options);
+
+            // File.WriteAllText("computersCopySystem.txt", computersCopySystem);
+
+        }
+
+        static string escapeSingleQuote(string input){
+            string output = input.Replace("'", "''");
             
-            foreach(Computer singleComputer in computers){
-                Console.WriteLine("'"+ singleComputer.ComputerId
-                + "','" + singleComputer.Motherboard
-                + "','" + singleComputer.HasWifi
-                + "','" + singleComputer.HasLTE
-                + "','" + singleComputer.ReleaseDate
-                + "','" + singleComputer.Price
-                + "','" + singleComputer.VideoCard
-                +"'");
-            }
-
-            //Selecting and displaying our data using entity framework.
-
-            IEnumerable<Computer>? computersEF = entityFramework.Computer?.ToList<Computer>();
-
-            Console.WriteLine("'ComputerId','Motherboard','HasWifi','HasLTE',' + 'ReleaseDate','Price','VideoCard'");
-
-            if(computersEF != null){
-                foreach(Computer singleComputer in computersEF){
-                    Console.WriteLine("'"+ singleComputer.ComputerId
-                    + "','" + singleComputer.Motherboard
-                    + "','" + singleComputer.HasWifi
-                    + "','" + singleComputer.HasLTE
-                    + "','" + singleComputer.ReleaseDate
-                    + "','" + singleComputer.Price
-                    + "','" + singleComputer.VideoCard
-                    +"'");
-                }
-            }
+            return output;
         }
     }
 }

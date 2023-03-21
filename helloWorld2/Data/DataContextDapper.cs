@@ -6,7 +6,7 @@ using Microsoft.Extensions.Configuration;
 namespace helloWorld2.Data{
     public class DataContextDapper {
 
-        private string _connectionString;
+        private string? _connectionString;
         
         public DataContextDapper(IConfiguration config){
             _connectionString = config.GetConnectionString("DefaultConnection");
