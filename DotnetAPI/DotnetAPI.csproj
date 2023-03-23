@@ -12,6 +12,7 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.4" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.0" />
     <PackageReference Include="microsoft.entityframeworkcore" Version="7.0.4" />
+    <PackageReference Include="microsoft.EntityFrameworkCore.Relational" Version="7.0.4" />
     <PackageReference Include="microsoft.entityframeworkcore.sqlserver" Version="7.0.4" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>

@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[2.0.123, )"
             },
+            "microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[7.0.4, )"
+            },
             "microsoft.entityframeworkcore": {
               "target": "Package",
               "version": "[7.0.4, )"

@@ -3128,6 +3128,7 @@
       "Swashbuckle.AspNetCore >= 6.4.0",
       "automapper >= 12.0.1",
       "dapper >= 2.0.123",
+      "microsoft.EntityFrameworkCore.Relational >= 7.0.4",
       "microsoft.entityframeworkcore >= 7.0.4",
       "microsoft.entityframeworkcore.sqlserver >= 7.0.4"
     ]
@@ -3195,6 +3196,10 @@
           "dapper": {
             "target": "Package",
             "version": "[2.0.123, )"
+          },
+          "microsoft.EntityFrameworkCore.Relational": {
+            "target": "Package",
+            "version": "[7.0.4, )"
           },
           "microsoft.entityframeworkcore": {
             "target": "Package",
