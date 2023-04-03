@@ -1,5 +1,6 @@
 using System.Data;
 using Microsoft.Data.SqlClient;
+using System.Data.SqlClient;
 using Dapper;
 
 namespace DotnetAPI.Data
@@ -30,10 +31,31 @@ namespace DotnetAPI.Data
             return dbConnection.Execute(sql) > 0;
         }
 
-        // public int ExecuteWithRowCount(string sql)
-        // {
-        //     IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
-        //     return dbConnection.Execute(sql);
-        // }
+        public int ExecuteWithRowCount(string sql)
+        {
+            IDbConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            return dbConnection.Execute(sql);
+        }
+
+        public bool ExecuteSqlWithParameters(string sql, List<SqlParameter> parameters)
+        {
+            SqlCommand commandWithParams = new SqlCommand(sql);
+
+            foreach(SqlParameter parameter in parameters) 
+            {
+                commandWithParams.Parameters.Add(parameter);
+            }
+
+            SqlConnection dbConnection = new SqlConnection(_config.GetConnectionString("DefaultConnection"));
+            dbConnection.Open();
+            
+            commandWithParams.Connection = dbConnection;
+
+            int rowsAffected = commandWithParams.ExecuteNonQuery();
+
+            dbConnection.Close();
+            
+            return rowsAffected  > 0;
+        }
     }
 }

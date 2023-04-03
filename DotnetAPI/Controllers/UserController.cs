@@ -17,6 +17,8 @@ public class UserController : ControllerBase
        Console.WriteLine(config.GetConnectionString("DefaultConnection"));
 
        _dapper = new DataContextDapper(config);
+
+
     }
 
     [HttpGet("TestConnection")]
@@ -77,28 +79,27 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("AddUser")]
-    public IActionResult AddUser(UserToAddDto user){
-        string sql = @"
-        INSERT INTO TutorialAppSchema.Users(
-            [FirstName],
-            [LastName],
-            [Email],
-            [Gender],
-            [Active]
-            ) VALUES (" + 
-            "'" + user.FirstName + 
-            "', '" + user.LastName +  
-            "', '" + user.Email + 
-            "', '" + user.Gender + 
-            "', '" + user.Active + 
-            "')";
+    public IActionResult AddUser(UserToAddTo user){
+        string sql = @$"
+            INSERT INTO TutorialAppSchema.Users(
+                [FirstName],
+                [LastName],
+                [Email],
+                [Gender],
+                [Active]
+                ) VALUES (" + 
+                "'" + user.FirstName + 
+                "', '" + user.LastName +  
+                "', '" + user.Email + 
+                "', '" + user.Gender + 
+                "', '" + user.Active + 
+                "')";
         if(_dapper.ExecuteSql(sql)){
             return Ok(); 
         } 
 
         throw new Exception("Failed to add user");
     }
-
 
     [HttpDelete("DeleteUser/{userId}")]
     public IActionResult DeleteUser(int userId)
