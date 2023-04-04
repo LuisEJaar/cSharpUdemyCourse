@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "WGwh9I7DD6d2bssRO1CZg368pGt4lFymU1d6AFzugyyhHRuMtpuanKovVYCyKw3JtiLhDrSJFb+5GMFhDAemsA==",
+  "dgSpecHash": "lTV9FsBjijq9E5BXTSy2qjaAag+QdLOV6NeLJ0/JlTlFP4ZnGMx/5BDFJbfNB5nXHx6P6+kBqFzasYybz8x+2g==",
   "success": true,
   "projectFilePath": "D:\\luisjgithub\\cSharpUdemyCourse\\DotnetAPI\\DotnetAPI.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\jaarle\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\jaarle\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\jaarle\\.nuget\\packages\\dapper\\2.0.123\\dapper.2.0.123.nupkg.sha512",
+    "C:\\Users\\jaarle\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\7.0.4\\microsoft.aspnetcore.authentication.jwtbearer.7.0.4.nupkg.sha512",
     "C:\\Users\\jaarle\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.4\\microsoft.aspnetcore.openapi.7.0.4.nupkg.sha512",
     "C:\\Users\\jaarle\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
     "C:\\Users\\jaarle\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
